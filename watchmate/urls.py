@@ -14,11 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from watchlist_api.views import MoviesList,MovieUpdate
+from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',MoviesList.as_view(),name='move-lists'),
-    path('<int:pk>/',MovieUpdate.as_view(),name='specific-movie')
+    path('',include('watchlist_api.urls')),
 ]
