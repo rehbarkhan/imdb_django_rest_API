@@ -18,8 +18,28 @@ class StreamPlatformList(APIView):
             return Response(stream_plaform.data,status=status.HTTP_201_CREATED)
         else:
             return Response(stream_plaform.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self,request,pk):
+        try:
+            stream_platform_object = StreamPlatform.objects.get(pk=pk)
+            stream_serialzer = StreamPlatformSerializer(stream_platform_object,data=request.data)
+            if stream_serialzer.is_valid():
+                stream_serialzer.save()
+                return Response(stream_serialzer.data,status=status.HTTP_202_ACCEPTED)
+            else:
+                return Response(stream_serialzer.errors,status=status.HTTP_205_RESET_CONTENT)
+        except:
+            return Response({'Error':'Unable to fetch the movie details'},status=status.HTTP_400_BAD_REQUEST)
 
-class Watchlist(APIView):
+    def delete(self,request,pk):
+        try:
+            stream_platform_object = StreamPlatform.objects.get(pk=pk)
+            stream_platform_object.delete()
+            return Response(status=status.HTTP_410_GONE)
+        except:
+            return Response({'Error':'Unable to fetch the movie details'},status=status.HTTP_400_BAD_REQUEST)
+
+class WatchlistView(APIView):
 
     def get(self,request):
         movies = Watchlist.objects.all()
